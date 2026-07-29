@@ -7,8 +7,8 @@
     <ProjectGuid>{D32F0ACB-5A89-4F4A-B58F-51EE9EBE83C5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FikaRaidSettingsSkipper</RootNamespace>
-    <AssemblyName>FikaRaidSettingsSkipper</AssemblyName>
+    <RootNamespace>RaidSettingsSkipper</RootNamespace>
+    <AssemblyName>RaidSettingsSkipper</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -65,7 +65,7 @@
 
   <ItemGroup>
     <Compile Include="Plugin.cs" />
-    <Compile Include="FikaRaidSettings.cs" />
+    <Compile Include="FikaDetection.cs" />
     <Compile Include="Patches\SkipRaidSettingsScreenPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

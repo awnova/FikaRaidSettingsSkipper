@@ -2,17 +2,18 @@ using System;
 using System.Linq;
 using System.Reflection;
 
-namespace FikaRaidSettingsSkipper
+namespace RaidSettingsSkipper
 {
-    // CanEditRaidSettings moved from a field on FikaPlugin (<=2.2.3) to a property on FikaPlugin.Settings (2.2.4+).
-    internal static class FikaRaidSettings
+    // Fika is optional, so it is probed reflectively. CanEditRaidSettings moved from a field on
+    // FikaPlugin (<=2.2.3) to a property on FikaPlugin.Settings (2.2.4+).
+    internal static class FikaDetection
     {
         private static bool _resolved;
         private static PropertyInfo _instance;
         private static PropertyInfo _settings;
         private static MemberInfo _canEdit;
 
-        internal static bool CanEdit
+        internal static bool CanEditRaidSettings
         {
             get
             {
@@ -57,7 +58,7 @@ namespace FikaRaidSettingsSkipper
             _instance = plugin?.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
             if (_instance == null)
             {
-                Plugin.LOG.LogWarning("Fika not found; the raid settings screen is left as-is.");
+                Plugin.LOG.LogInfo("Fika not found; only the config entry decides whether the raid settings screen is skipped.");
                 return;
             }
 

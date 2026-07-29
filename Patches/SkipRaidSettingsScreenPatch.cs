@@ -3,7 +3,7 @@ using EFT;
 using HarmonyLib;
 using SPT.Reflection.Patching;
 
-namespace FikaRaidSettingsSkipper.Patches
+namespace RaidSettingsSkipper.Patches
 {
     // Skipping method_50 means Back never lands here either, since a screen only joins the back chain via ShowScreen.
     internal sealed class SkipRaidSettingsScreenPatch : ModulePatch
@@ -19,7 +19,9 @@ namespace FikaRaidSettingsSkipper.Patches
         [PatchPrefix]
         private static bool Prefix(MainMenuControllerClass __instance)
         {
-            if (FikaRaidSettings.CanEdit)
+            // Fika is only consulted when the user opted out: a server that disables raid settings
+            // leaves the screen empty, so it is skipped either way.
+            if (!Plugin.SkipRaidSettings.Value && FikaDetection.CanEditRaidSettings)
             {
                 return true;
             }
