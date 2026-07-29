@@ -24,7 +24,10 @@ namespace FikaRaidSettingsSkipper.Patches
                 return true;
             }
 
+            // Other patches on method_80 may rewrite RaidMode to pick a branch; the raid must still start in the mode it was queued in.
+            ERaidMode raidMode = __instance.RaidSettings_0.RaidMode;
             __instance.method_80();
+            __instance.RaidSettings_0.RaidMode = raidMode;
 
             return false;
         }
