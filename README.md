@@ -10,8 +10,7 @@ The screen is skipped whenever either of these is true:
 - **The config checkbox is ticked** (the default). You go straight from location select to insurance
   (online raids) or match accept.
 - **Fika is installed and the server sets `canEditRaidSettings = false`.** Fika blocks the settings
-  window and only shows a "raid settings are disabled" notification, so the screen has nothing on
-  it. That is skipped even with the checkbox off — there is nothing to come back for.
+  window and only shows a "raid settings are disabled" notification, so the screen isnt needed.
 
 Untick the checkbox on a plain SPT install, or on a Fika server that allows raid settings, and the
 screen behaves exactly as vanilla.
