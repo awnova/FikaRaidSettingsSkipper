@@ -7,9 +7,7 @@ server has raid settings turned off.
 
 The screen shown between location select and the raid follows Fika's server config:
 
-- `canEditRaidSettings = false` — Fika blocks the settings window and only shows a "raid settings
-  are disabled" notification, so the screen has nothing on it. This mod takes it out of the flow:
-  you go straight to insurance (online raids) or match accept.
+- `canEditRaidSettings = false` — Fika prevents the player from editing the raid settings. Since there is nothing to change, this mod takes the screen out of the flow entirely: you go straight to insurance (online raids) or match accept.
 - `canEditRaidSettings = true` — the screen is shown exactly as normal. The mod does nothing.
 
 Because the screen is never built and never enters the screen queue, it is also gone in the back
