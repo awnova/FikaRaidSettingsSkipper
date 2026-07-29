@@ -4,12 +4,7 @@ using System.Reflection;
 
 namespace FikaRaidSettingsSkipper
 {
-    /// <summary>
-    /// Reads Fika's server-provided <c>canEditRaidSettings</c> flag without a build-time reference,
-    /// because it moved between versions: a field on <c>FikaPlugin</c> up to 2.2.3, a property on
-    /// <c>FikaPlugin.Settings</c> from 2.2.4 on. Unknown shapes report "can edit", so the screen is
-    /// left alone rather than skipped on a guess.
-    /// </summary>
+    // CanEditRaidSettings moved from a field on FikaPlugin (<=2.2.3) to a property on FikaPlugin.Settings (2.2.4+).
     internal static class FikaRaidSettings
     {
         private static bool _resolved;
