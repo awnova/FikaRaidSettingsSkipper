@@ -10,7 +10,7 @@ The screen is skipped whenever either of these is true:
 - **The config checkbox is ticked** (the default). You go straight from location select to insurance
   (online raids) or match accept.
 - **Fika is installed and the server sets `canEditRaidSettings = false`.** Fika blocks the settings
-  window and only shows a "raid settings are disabled" notification, so the screen isnt needed.
+  window and only shows a "raid settings are disabled" notification, so the screen isn't needed.
 
 Untick the checkbox on a plain SPT install, or on a Fika server that allows raid settings, and the
 screen behaves exactly as vanilla.
@@ -30,7 +30,7 @@ The value is read each time the screen would be queued, so changes apply immedia
 
 ## How it works
 
-`MainMenuControllerClass.method_50` is the only place `MatchmakerOfflineRaidScreen` is ever
+`MainMenuShowOperation.method_50` is the only place `MatchmakerOfflineRaidScreen` is ever
 constructed and queued — location select, map points and the pocket map all funnel through it. A
 single Harmony prefix takes the screen's own "Next" branch and skips the body: `ERaidMode.Online`
 continues to the insurance screen, anything else goes straight to match accept.
@@ -50,8 +50,17 @@ There is no simulated button click and no coroutine waiting on UI layout.
 
 ## Requirements
 
-- SPT client install. Fika optional.
+- **SPT 4.1.** Fika optional.
 - .NET Framework 4.8 developer tools (for building).
+
+SPT 4.1 deobfuscated the client, renaming the class this mod patches. Version 1.2.0 targets 4.1 only;
+use 1.1.0 for SPT 4.0.x.
+
+## Upgrading to 1.2.0
+
+1.2.0 is SPT 4.1 only. It will not load on 4.0.x — the type it patches does not exist there, and
+BepInEx logs a patch error at startup. The DLL name and plugin GUID are unchanged since 1.1.0, so it
+overwrites the old file cleanly and your config is kept.
 
 ## Upgrading from 1.0.x
 
@@ -70,5 +79,5 @@ Drop that into your SPT `BepInEx\plugins` folder.
 ## Credits
 
 Approach inspired by [no-insurance](https://gitlab.com/vibrantrida/no-insurance), which showed me that
-these menu steps are best removed at the `MainMenuControllerClass` transition rather than papered
+these menu steps are best removed at the `MainMenuShowOperation` transition rather than papered
 over in the UI like my first attempt.

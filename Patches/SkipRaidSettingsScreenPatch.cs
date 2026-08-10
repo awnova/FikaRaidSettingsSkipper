@@ -11,13 +11,13 @@ namespace RaidSettingsSkipper.Patches
         protected override MethodBase GetTargetMethod()
         {
             return AccessTools.Method(
-                typeof(MainMenuControllerClass),
-                nameof(MainMenuControllerClass.method_50)
+                typeof(MainMenuShowOperation),
+                nameof(MainMenuShowOperation.method_50)
             );
         }
 
         [PatchPrefix]
-        private static bool Prefix(MainMenuControllerClass __instance)
+        private static bool Prefix(MainMenuShowOperation __instance)
         {
             // Fika is only consulted when the user opted out: a server that disables raid settings
             // leaves the screen empty, so it is skipped either way.
@@ -26,10 +26,10 @@ namespace RaidSettingsSkipper.Patches
                 return true;
             }
 
-            // Other patches on method_80 may rewrite RaidMode to pick a branch; the raid must still start in the mode it was queued in.
-            ERaidMode raidMode = __instance.RaidSettings_0.RaidMode;
-            __instance.method_80();
-            __instance.RaidSettings_0.RaidMode = raidMode;
+            // Other patches on CG_method_80 may rewrite RaidMode to pick a branch; the raid must still start in the mode it was queued in.
+            ERaidMode raidMode = __instance.raidSettings_0.RaidMode;
+            __instance.CG_method_80();
+            __instance.raidSettings_0.RaidMode = raidMode;
 
             return false;
         }
