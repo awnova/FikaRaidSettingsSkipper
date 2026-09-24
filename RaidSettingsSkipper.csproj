@@ -50,8 +50,20 @@
     <Reference Include="Comfort.Unity">
       <HintPath>$(SPTBaseDir)\EscapeFromTarkov_Data\Managed\Comfort.Unity.dll</HintPath>
     </Reference>
+    <Reference Include="spt-common">
+      <HintPath>$(SPTBaseDir)\BepInEx\plugins\spt\spt-common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="spt-custom">
+      <HintPath>$(SPTBaseDir)\BepInEx\plugins\spt\spt-custom.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="spt-reflection">
       <HintPath>$(SPTBaseDir)\BepInEx\plugins\spt\spt-reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="spt-singleplayer">
+      <HintPath>$(SPTBaseDir)\BepInEx\plugins\spt\spt-singleplayer.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -66,7 +78,9 @@
   <ItemGroup>
     <Compile Include="Plugin.cs" />
     <Compile Include="FikaDetection.cs" />
+    <Compile Include="RaidSettingsScreenEffects.cs" />
     <Compile Include="Patches\SkipRaidSettingsScreenPatch.cs" />
+    <Compile Include="Patches\SkipScavRaidSettingsScreenPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
 

@@ -1,6 +1,7 @@
 using System;
-using System.Linq;
 using System.Reflection;
+using BepInEx;
+using BepInEx.Bootstrap;
 
 namespace RaidSettingsSkipper
 {
@@ -8,20 +9,27 @@ namespace RaidSettingsSkipper
     // FikaPlugin (<=2.2.3) to a property on FikaPlugin.Settings (2.2.4+).
     internal static class FikaDetection
     {
+        private const string FikaGuid = "com.fika.core";
+
         private static bool _resolved;
-        private static PropertyInfo _instance;
+        private static object _plugin;
         private static PropertyInfo _settings;
         private static MemberInfo _canEdit;
+
+        internal static bool IsLoaded
+        {
+            get
+            {
+                EnsureResolved();
+                return _plugin != null;
+            }
+        }
 
         internal static bool CanEditRaidSettings
         {
             get
             {
-                if (!_resolved)
-                {
-                    Resolve();
-                    _resolved = true;
-                }
+                EnsureResolved();
 
                 if (_canEdit == null)
                 {
@@ -30,11 +38,7 @@ namespace RaidSettingsSkipper
 
                 try
                 {
-                    object target = _instance.GetValue(null, null);
-                    if (_settings != null)
-                    {
-                        target = _settings.GetValue(target, null);
-                    }
+                    object target = _settings != null ? _settings.GetValue(_plugin, null) : _plugin;
 
                     return _canEdit is FieldInfo fieldInfo
                         ? (bool)fieldInfo.GetValue(target)
@@ -48,19 +52,35 @@ namespace RaidSettingsSkipper
             }
         }
 
+        private static void EnsureResolved()
+        {
+            if (_resolved)
+            {
+                return;
+            }
+
+            _resolved = true;
+            try
+            {
+                Resolve();
+            }
+            catch (Exception ex)
+            {
+                _canEdit = null;
+                Plugin.LOG.LogWarning($"Could not inspect Fika; the config entry alone decides. {ex.Message}");
+            }
+        }
+
         private static void Resolve()
         {
-            Type plugin = AppDomain.CurrentDomain
-                .GetAssemblies()
-                .Select(assembly => assembly.GetType("Fika.Core.FikaPlugin", false))
-                .FirstOrDefault(type => type != null);
-
-            _instance = plugin?.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
-            if (_instance == null)
+            if (!Chainloader.PluginInfos.TryGetValue(FikaGuid, out PluginInfo info) || info.Instance == null)
             {
                 Plugin.LOG.LogInfo("Fika not found; only the config entry decides whether the raid settings screen is skipped.");
                 return;
             }
+
+            _plugin = info.Instance;
+            Type plugin = _plugin.GetType();
 
             _canEdit = Find(plugin, "CanEditRaidSettings");
             if (_canEdit != null)
