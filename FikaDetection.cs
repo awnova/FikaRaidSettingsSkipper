@@ -5,8 +5,7 @@ using BepInEx.Bootstrap;
 
 namespace RaidSettingsSkipper
 {
-    // Fika is optional, so it is probed reflectively. CanEditRaidSettings moved from a field on
-    // FikaPlugin (<=2.2.3) to a property on FikaPlugin.Settings (2.2.4+).
+    // Fika is optional, so it is probed reflectively: CanEditRaidSettings is a property on FikaPlugin.Settings.
     internal static class FikaDetection
     {
         private const string FikaGuid = "com.fika.core";
@@ -14,7 +13,7 @@ namespace RaidSettingsSkipper
         private static bool _resolved;
         private static object _plugin;
         private static PropertyInfo _settings;
-        private static MemberInfo _canEdit;
+        private static PropertyInfo _canEdit;
 
         internal static bool IsLoaded
         {
@@ -38,11 +37,7 @@ namespace RaidSettingsSkipper
 
                 try
                 {
-                    object target = _settings != null ? _settings.GetValue(_plugin, null) : _plugin;
-
-                    return _canEdit is FieldInfo fieldInfo
-                        ? (bool)fieldInfo.GetValue(target)
-                        : (bool)((PropertyInfo)_canEdit).GetValue(target, null);
+                    return (bool)_canEdit.GetValue(_settings.GetValue(_plugin, null), null);
                 }
                 catch (Exception ex)
                 {
@@ -80,27 +75,16 @@ namespace RaidSettingsSkipper
             }
 
             _plugin = info.Instance;
-            Type plugin = _plugin.GetType();
 
-            _canEdit = Find(plugin, "CanEditRaidSettings");
-            if (_canEdit != null)
-            {
-                return;
-            }
-
-            _settings = plugin.GetProperty("Settings", BindingFlags.Public | BindingFlags.Instance);
-            _canEdit = _settings == null ? null : Find(_settings.PropertyType, "CanEditRaidSettings");
-
-            if (_canEdit == null)
-            {
-                Plugin.LOG.LogWarning("Fika's CanEditRaidSettings moved; the raid settings screen is left as-is.");
-            }
-        }
-
-        private static MemberInfo Find(Type type, string name)
-        {
             const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance;
-            return (MemberInfo)type.GetField(name, flags) ?? type.GetProperty(name, flags);
+            _settings = _plugin.GetType().GetProperty("Settings", flags);
+            _canEdit = _settings?.PropertyType.GetProperty("CanEditRaidSettings", flags);
+
+            if (_canEdit == null || _canEdit.PropertyType != typeof(bool))
+            {
+                _canEdit = null;
+                Plugin.LOG.LogWarning("Fika's CanEditRaidSettings moved; the config entry alone decides.");
+            }
         }
     }
 }

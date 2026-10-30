@@ -40,15 +40,19 @@
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>$(SPTBaseDir)\BepInEx\core\0Harmony.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(SPTBaseDir)\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="BepInEx">
       <HintPath>$(SPTBaseDir)\BepInEx\core\BepInEx.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Comfort.Unity">
       <HintPath>$(SPTBaseDir)\EscapeFromTarkov_Data\Managed\Comfort.Unity.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="spt-common">
       <HintPath>$(SPTBaseDir)\BepInEx\plugins\spt\spt-common.dll</HintPath>
@@ -60,6 +64,7 @@
     </Reference>
     <Reference Include="spt-reflection">
       <HintPath>$(SPTBaseDir)\BepInEx\plugins\spt\spt-reflection.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="spt-singleplayer">
       <HintPath>$(SPTBaseDir)\BepInEx\plugins\spt\spt-singleplayer.dll</HintPath>
@@ -69,9 +74,11 @@
     <Reference Include="System.Core" />
     <Reference Include="UnityEngine">
       <HintPath>$(SPTBaseDir)\EscapeFromTarkov_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(SPTBaseDir)\EscapeFromTarkov_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
 

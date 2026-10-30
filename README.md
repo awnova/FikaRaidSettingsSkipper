@@ -20,7 +20,8 @@ the SPT server (AI amount and difficulty, bosses, tagged & cursed, random weathe
 anyway, and on Fika they are handed to the raid the same way closing the screen would.
 
 Because the screen is never built and never enters the screen queue, it is also gone in the back
-direction: pressing Back on the following screen returns you to location/map select.
+direction: pressing Back on the following screen returns you to whichever screen came before it
+(location select, or map point select if you went through it).
 
 ## Configuration
 
@@ -43,35 +44,40 @@ The value is read each time the screen would be queued, so changes apply immedia
 - **Scav:** SPT's `LoadOfflineRaidScreenPatch` rewires the location screen to build the screen itself
   in `LoadOfflineRaidScreenForScav`. A second prefix skips that and calls SPT's own Next handler.
 
-A skipped screen never runs the patches SPT and Fika attach to it, so the mod replays the ones that
-matter: SPT's `SetPreRaidSettingsScreenDefaultsPatch` (server raid-menu defaults) and
-`CopyPmcQuestsAndWishlistToPlayerScavPatch` when the screen would show, and Fika's
-`MatchmakerOfflineRaidScreen_Close_Patch` (time/weather, waves, metabolism, spawn place) when it would
-close.
+A skipped screen never runs its own `Show`/`Close` or the patches SPT and Fika attach to them, so the
+mod replays the parts that matter. When the screen would show: SPT's
+`SetPreRaidSettingsScreenDefaultsPatch` (server raid-menu defaults, offline toggle off) and
+`CopyPmcQuestsAndWishlistToPlayerScavPatch`. When it would close: the screen's own raid mode hand-off
+and Fika's `MatchmakerOfflineRaidScreen_Close_Patch` (time/weather, waves, metabolism, spawn place).
 
 Skipping it forward removes it backward too, for free. Queued screens form a linked list — each one
 walks back to the current screen controller and stores it as its previous screen. A screen that
-never calls `ShowScreen` never joins that list, so Back on the following screen returns to location
-select rather than to a settings screen you never saw.
+never calls `ShowScreen` never joins that list, so Back on the following screen returns to the screen
+before it rather than to a settings screen you never saw.
 
-Fika is never referenced at compile time. `CanEditRaidSettings` is looked up reflectively both
-because Fika is optional and because the flag moved between versions — a field on `FikaPlugin` up to
-2.2.3, a property on `FikaPlugin.Settings` from 2.2.4 on. If Fika is absent or neither is found, the
-mod reports "can edit" and the config entry alone decides. Fika is found through BepInEx's plugin
+Fika is never referenced at compile time. `CanEditRaidSettings` (a property on `FikaPlugin.Settings`)
+is looked up reflectively because Fika is optional. If Fika is absent or the property is not found,
+the mod reports "can edit" and the config entry alone decides. Fika is found through BepInEx's plugin
 list (`com.fika.core`), not by scanning assemblies.
 
 The mod does not load alongside Fika.Headless, which drives this menu itself and patches the same
-method.
+methods.
 
 There is no simulated button click and no coroutine waiting on UI layout.
 
 ## Requirements
 
-- **SPT 4.1** (checked against 4.1.2 and 4.1.6). Fika optional (checked against 2.4.2).
+- **SPT 4.1** (checked against 4.1.2 and 4.1.6). Fika optional (checked against 2.4.2 and 2.4.6).
 - .NET Framework 4.8 developer tools (for building).
 
 SPT 4.1 deobfuscated the client, renaming the class this mod patches. Versions 1.2.0 and later target 4.1 only;
 use 1.1.0 for SPT 4.0.x.
+
+## Upgrading to 1.3.1
+
+Drop-in replacement for 1.3.0; your config is kept. No behaviour change: skipped screens now replay
+the screen's own raid mode hand-off exactly as vanilla does, and support for Fika 2.2.x (SPT 4.0 only)
+was removed from the Fika check.
 
 ## Upgrading to 1.3.0
 

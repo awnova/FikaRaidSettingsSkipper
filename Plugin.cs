@@ -7,9 +7,9 @@ using SPT.Reflection.Patching;
 
 namespace RaidSettingsSkipper
 {
-    [BepInPlugin("com.awnova.raidsettingsskipper", "RaidSettingsSkipper", "1.3.0")]
+    [BepInPlugin("com.awnova.raidsettingsskipper", "RaidSettingsSkipper", "1.3.1")]
     [BepInProcess("EscapeFromTarkov.exe")]
-    // Fika.Headless drives this menu itself and already prefixes method_50.
+    // Fika.Headless drives this menu itself and already patches method_50 and CG_method_77.
     [BepInIncompatibility("com.fika.headless")]
     public sealed class Plugin : BaseUnityPlugin
     {

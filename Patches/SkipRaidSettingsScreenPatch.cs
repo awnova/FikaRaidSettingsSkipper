@@ -35,10 +35,7 @@ namespace RaidSettingsSkipper.Patches
 
             RaidSettingsScreenEffects.OnScreenShown(__instance.raidSettings_1);
 
-            // Other patches on CG_method_80 may rewrite RaidMode to pick a branch; the raid must still start in the mode it was queued in.
-            ERaidMode raidMode = __instance.raidSettings_0.RaidMode;
             __instance.CG_method_80();
-            __instance.raidSettings_0.RaidMode = raidMode;
 
             // Vanilla closes the screen after the Next handler ran, so Labs' forced bosses are carried over too.
             RaidSettingsScreenEffects.OnScreenClosed(__instance.raidSettings_0, __instance.raidSettings_1);
